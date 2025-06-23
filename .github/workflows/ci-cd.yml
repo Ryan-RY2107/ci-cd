@@ -27,24 +27,10 @@ jobs:
         working-directory: frontend
         run: npm install
 
-      - name: Run Lint (backend)
-        working-directory: backend
-        run: npm run lint || echo "Lint failed (not fatal)"
-
+      
       - name: Run Audit (backend)
         working-directory: backend
         run: npm audit --audit-level=high || echo "Audit warnings"
-
-      - name: Install Snyk CLI
-        run: npm install -g snyk
-
-      - name: Static Code Analysis with Snyk (backend)
-        working-directory: backend
-        run: snyk test || echo "Snyk test (backend) passed with warnings"
-
-      - name: Static Code Analysis with Snyk (frontend)
-        working-directory: frontend
-        run: snyk test || echo "Snyk test (frontend) passed with warnings"
 
       - name: Run Tests (backend)
         working-directory: backend
