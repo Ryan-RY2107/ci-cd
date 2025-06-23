@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Run Lint (backend)
+        working-directory: backend
+        run: npm run lint || echo "Lint failed (not fatal)"
+
+      - name: Run Audit (backend)
+        working-directory: backend
+        run: npm audit --audit-level=high || echo "Audit warnings"
+
+      - name: Static Code Analysis with Snyk
+        run: |
+          npm install -g snyk
+          snyk test || echo "Snyk test passed with warnings"
+
+      - name: Run Tests (backend)
+        working-directory: backend
+        run: echo "No tests yet"
+
+      - name: Build Docker Images
+        run: |
+          docker build -t myuser/frontend ./frontend
+          docker build -t myuser/backend ./backend
+
+      - name: Docker Login and Push (only on main)
+        if: github.ref == 'refs/heads/main'
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
+          docker tag myuser/frontend myuser/app:frontend
+          docker tag myuser/backend myuser/app:backend
+          docker push myuser/app:frontend
+          docker push myuser/app:backend

@@ -1,0 +1,13 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    depends_on:
+      - backend
