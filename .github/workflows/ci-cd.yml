@@ -35,10 +35,16 @@ jobs:
         working-directory: backend
         run: npm audit --audit-level=high || echo "Audit warnings"
 
-      - name: Static Code Analysis with Snyk
-        run: |
-          npm install -g snyk
-          snyk test || echo "Snyk test passed with warnings"
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Static Code Analysis with Snyk (backend)
+        working-directory: backend
+        run: snyk test || echo "Snyk test (backend) passed with warnings"
+
+      - name: Static Code Analysis with Snyk (frontend)
+        working-directory: frontend
+        run: snyk test || echo "Snyk test (frontend) passed with warnings"
 
       - name: Run Tests (backend)
         working-directory: backend
@@ -60,4 +66,3 @@ jobs:
           docker tag my-docker-app/backend $DOCKER_USER/my-docker-app:backend
           docker push $DOCKER_USER/my-docker-app:frontend
           docker push $DOCKER_USER/my-docker-app:backend
-
