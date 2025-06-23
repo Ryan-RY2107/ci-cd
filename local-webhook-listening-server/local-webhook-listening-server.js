@@ -8,8 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const repoDir = '/path/to/your/target/directory'; // this is where the code will pll your directory code locally just to use the docker-compose.yml file
-const repoUrl = 'https://github.com/user/repo.git';// this is the url of the repo you want to pull the code from
+const repoDir = '/Users/renyi/Desktop/Efrei/efrei/S8/DevOps_and_MLOps/ci-cd-pipeline '; // this is where the code will pll your directory code locally just to use the docker-compose.yml file
+const repoUrl = 'https://github.com/Ryan-RY2107/ci-cd.git';// this is the url of the repo you want to pull the code from
 
 const repoName = path.basename(repoUrl, '.git');
 const fullPath = path.join(repoDir, repoName);

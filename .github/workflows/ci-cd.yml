@@ -42,7 +42,7 @@ jobs:
 
       - name: Run Tests (backend)
         working-directory: backend
-        run: echo "No tests yet"
+        run: npm run test
 
       - name: Build Docker Images
         run: |
