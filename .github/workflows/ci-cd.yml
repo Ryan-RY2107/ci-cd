@@ -56,7 +56,8 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-          docker tag myuser/frontend myuser/app:frontend
-          docker tag myuser/backend myuser/app:backend
-          docker push myuser/app:frontend
-          docker push myuser/app:backend
+          docker tag myapp/frontend $DOCKER_USER/my-docker-app:frontend
+          docker tag myapp/backend $DOCKER_USER/my-docker-app:backend
+          docker push $DOCKER_USER/my-docker-app:frontend
+          docker push $DOCKER_USER/my-docker-app:backend
+
